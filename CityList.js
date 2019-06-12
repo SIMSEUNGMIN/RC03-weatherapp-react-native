@@ -1,11 +1,55 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Constants } from 'expo';
+import * as Font from 'expo-font';
 
 export default class CityList extends React.Component {
-  static navigationOptions = {
-    title: 'Cities',
-  };
+   async componentDidMount() {
+        fetch('http://demo6468405.mockable.io/weather-crawlers/cities')
+          .then(response => response.json())
+          .then(cities => {
+            console.log('cities =', cities.length);
+            this.setState({
+              cities
+            });
+          });
+
+       await Font.loadAsync({
+           'Regular': require('./assets/fonts/DancingScript-Regular.ttf'),
+         });
+
+      }
+
+  static navigationOptions = ({ navigation }) => {
+      return {
+        headerTitle : (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                      <Text style={{ fontSize: 25}}>
+                        How is the weather?
+                      </Text>
+                </View>
+            ),
+            headerStyle: {
+                 backgroundColor: '#C8d7ff',
+              },
+      };
+    };
+
+//  navigationOptions = {
+//    headerTitle : (
+//        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//              <Text style={styles.text}>
+//                How is the weather?
+//              </Text>
+//        </View>
+//    ),
+//    headerStyle: {
+//         backgroundColor: '#C8d7ff',
+//      },
+////    headerTitleStyle: {
+////       fontFamily: 'Regular',
+////      },
+//  };
 
   constructor(props) {
     super(props);
@@ -13,17 +57,6 @@ export default class CityList extends React.Component {
     this.state = {
       cities: [],
     };
-  }
-
-  componentDidMount() {
-    fetch('http://demo6468405.mockable.io/weather-crawlers/cities')
-      .then(response => response.json())
-      .then(cities => {
-        console.log('cities =', cities.length);
-        this.setState({
-          cities
-        });
-      });
   }
 
   onPressCity(item) {
@@ -57,8 +90,7 @@ export default class CityList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    marginTop: Constants.statusBarHeight,
+    backgroundColor: '#F4ffff',
   },
 
   item: {
@@ -67,10 +99,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 
     borderWidth: 1,
-    borderColor: 'orange',
+    borderColor: '#C8d7ff',
   },
   text: {
-    fontSize: 20,
+    fontSize: 25,
     textAlign: 'center',
+    fontFamily: 'Regular',
   }
 });
